@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Movie Collection</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>My Movie Collection</h1>
+      <p class="welcome">Welcome — explore the collection using the buttons below.</p>
+    </header>
+
+    <div class="controls">
+      <button id="btnAll" class="btn">View All Movies</button>
+      <button id="btnClassics" class="btn">View Classic Movies</button>
+      <button id="btnGenres" class="btn">View Genres</button>
+    </div>
+
+    <main id="output" class="output">
+      <p class="hint">Click a button to load data.</p>
+    </main>
+
+    <footer>
+      <small>Built with Node.js & Express • Sample project</small>
+    </footer>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+    const btnAll = document.getElementById('btnAll');
+    const btnClassics = document.getElementById('btnClassics');
+    const btnGenres = document.getElementById('btnGenres');
+
+    function showError(msg) {
+      output.innerHTML = `<div class="error">Error: ${msg}</div>`;
+    }
+
+    function renderMovies(movies) {
+      if (!movies || movies.length === 0) {
+        output.innerHTML = `<p class="hint">No movies found.</p>`;
+        return;
+      }
+      const list = document.createElement('div');
+      list.className = 'movie-grid';
+      movies.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.innerHTML = `
+          <div class="movie-header">
+            <h3 class="title">${escapeHtml(m.title)}</h3>
+            ${m.isClassic ? '<span class="badge">Classic</span>' : ''}
+          </div>
+          <p><strong>Genre:</strong> ${escapeHtml(m.genre)}</p>
+          <p><strong>Release Year:</strong> <span class="year">${m.releaseYear}</span></p>
+          <p><strong>Director:</strong> ${escapeHtml(m.director)}</p>
+        `;
+        list.appendChild(card);
+      });
+      output.innerHTML = '';
+      output.appendChild(list);
+    }
+
+    function renderGenres(payload) {
+      if (!payload || !payload.genres || payload.genres.length === 0) {
+        output.innerHTML = '<p class="hint">No genres available.</p>';
+        return;
+      }
+      const ul = document.createElement('div');
+      ul.className = 'genre-list';
+      payload.genres.forEach(g => {
+        const row = document.createElement('div');
+        row.className = 'genre-row';
+        row.innerHTML = `<span class="genre-name">${escapeHtml(g.name)}</span><span class="genre-count">${g.movieCount}</span>`;
+        ul.appendChild(row);
+      });
+      output.innerHTML = '';
+      output.appendChild(ul);
+    }
+
+    // helpers
+    function escapeHtml(str) {
+      if (!str && str !== 0) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    async function fetchJson(url) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`HTTP ${res.status} - ${text}`);
+        }
+        return await res.json();
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    btnAll.addEventListener('click', async () => {
+      output.innerHTML = `<p class="loading">Loading all movies...</p>`;
+      try {
+        const data = await fetchJson('/movies');
+        renderMovies(data);
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    btnClassics.addEventListener('click', async () => {
+      output.innerHTML = `<p class="loading">Loading classic movies...</p>`;
+      try {
+        const data = await fetchJson('/movies/classics');
+        renderMovies(data);
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    btnGenres.addEventListener('click', async () => {
+      output.innerHTML = `<p class="loading">Loading genres...</p>`;
+      try {
+        const data = await fetchJson('/movies/genres');
+        renderGenres(data);
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+  </script>
+</body>
+</html>
