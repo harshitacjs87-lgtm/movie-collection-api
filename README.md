@@ -17,7 +17,6 @@ A simple Node.js + Express API that serves movie data and a static frontend to b
 - Thriller
 
 ## Project Structure
-
 movie-collection-api/
 ├─ node_modules/
 ├─ public/
@@ -28,6 +27,8 @@ movie-collection-api/
 ├─ README.md
 └─ server.js
 
+bash
+Copy code
 
 ## API Documentation
 
@@ -37,104 +38,100 @@ movie-collection-api/
 - **Description:** Returns an array of all movie objects.
 - **Sample Response:**
 ```json
-    [
-    {
-        "id": 1,
-        "title": "The Shawshank Redemption",
-        "genre": "Drama",
-        "releaseYear": 1994,
-        "isClassic": true,
-        "director": "Frank Darabont"
-    },
-    ...
-    ]
-
+[
+  {
+    "id": 1,
+    "title": "The Shawshank Redemption",
+    "genre": "Drama",
+    "releaseYear": 1994,
+    "isClassic": true,
+    "director": "Frank Darabont"
+  },
+  ...
+]
 2. Get classic movies
+Endpoint: /movies/classics
 
-- Endpoint:/movies/classics
+Method: GET
 
-- Method: GET
+Description: Returns movies where isClassic is true.
 
-- Description: Returns movies where isClassic is true.
+Sample Response:
 
-- Sample Response:
-
-    [
-    {
-        "id": 1,
-        "title": "The Shawshank Redemption",
-        "genre": "Drama",
-        "releaseYear": 1994,
-        "isClassic": true,
-        "director": "Frank Darabont"
-    }
-    ]
-
+json
+Copy code
+[
+  {
+    "id": 1,
+    "title": "The Shawshank Redemption",
+    "genre": "Drama",
+    "releaseYear": 1994,
+    "isClassic": true,
+    "director": "Frank Darabont"
+  }
+]
 3. Get genres with counts
+Endpoint: /movies/genres
 
-- Endpoint: /movies/genres
+Method: GET
 
-- Method: GET
+Description: Returns an object with a genres array. Each element contains name and movieCount.
 
-- Description: Returns an object with a genres array. Each element contains name and movieCount.
+Sample Response:
 
-- Sample Response:
-
-    {
-    "genres": [
-        { "name": "Drama", "movieCount": 1 },
-        { "name": "Sci-Fi", "movieCount": 2 },
-        { "name": "Action", "movieCount": 1 }
-    ]
-    }
-
-
+json
+Copy code
+{
+  "genres": [
+    { "name": "Drama", "movieCount": 1 },
+    { "name": "Sci-Fi", "movieCount": 2 },
+    { "name": "Action", "movieCount": 1 }
+  ]
+}
 Installation & Setup Instructions
+Clone the repository:
 
-1. Clone the repository:
+bash
+Copy code
+git clone <YOUR_REPO_URL>
+cd movie-collection-api
+Install dependencies:
 
-    git clone <YOUR_REPO_URL>
-    cd movie-collection-api
+bash
+Copy code
+npm install
+Start the server:
 
-
-
-2. Install dependencies:
-
-    npm install
-
-
-3. Start the server:
-
-    npm start
-
-
+bash
+Copy code
+npm start
 The server will start on port 3000.
 
-4. Access:
+Access:
 
-- Frontend: http://localhost:3000 (serves public/index.html)
+Frontend: http://localhost:3000 (serves public/index.html)
 
-- API endpoints:
+API endpoints:
 
-    - http://localhost:3000/movies
+http://localhost:3000/movies
 
-    - http://localhost:3000/movies/classics
+http://localhost:3000/movies/classics
 
-    - http://localhost:3000/movies/genres
+http://localhost:3000/movies/genres
 
 Features
+GET endpoints for all movies, classic movies, and genres with counts
 
-- GET endpoints for all movies, classic movies, and genres with counts
+Simple frontend using fetch() and dynamic DOM rendering
 
-- Simple frontend using fetch() and dynamic DOM rendering
+Visual badge for classic movies
 
-- Visual badge for classic movies
+In-memory data array (no DB required)
 
-- In-memory data array (no DB required)
-
+GitHub Repository Link
+Replace with your repo URL: 
 
 Author
-
 Harshitha C J
 
 
@@ -147,16 +144,14 @@ Harshitha C J
 ```bash
 npm install
 npm start
+Open http://localhost:3000 in your browser.
 
+Test:
 
-3. Open http://localhost:3000 in your browser.
+/movies → show all movies
 
-4. Test:
+/movies/classics → only classics
 
-    - /movies → show all movies
+/movies/genres → genre counts
 
-    - /movies/classics → only classics
-
-    - /movies/genres → genre counts
-
-    - Use buttons on the frontend to fetch and display.
+Use buttons on the frontend to fetch and display.
